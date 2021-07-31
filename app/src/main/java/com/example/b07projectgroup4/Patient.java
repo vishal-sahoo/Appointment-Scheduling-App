@@ -15,7 +15,7 @@ public class Patient implements Serializable {
     private Calendar dob;
     private List<Appointment> previous_appointments = new LinkedList<Appointment>();
     private List<Appointment> upcoming_appointments = new LinkedList<Appointment>();
-    private List<Doctor> doctors_visited = new LinkedList<Doctor>();
+    private List<String> doctors_visited = new LinkedList<String>();
 
     public Patient() {
 
@@ -95,11 +95,11 @@ public class Patient implements Serializable {
         this.upcoming_appointments = upcoming_appointments;
     }
 
-    public List<Doctor> getDoctors_visited() {
+    public List<String> getDoctors_visited() {
         return doctors_visited;
     }
 
-    public void setDoctors_visited(List<Doctor> doctors_visited) {
+    public void setDoctors_visited(List<String> doctors_visited) {
         this.doctors_visited = doctors_visited;
     }
 }

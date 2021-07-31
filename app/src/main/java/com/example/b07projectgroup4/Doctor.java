@@ -12,7 +12,7 @@ public class Doctor implements Serializable {
     private String name;
     private String gender;
     private List<String> specializations = new LinkedList<String>();
-    private List<Patient> patients_attended = new LinkedList<Patient>();
+    private List<String> patients_attended = new LinkedList<String>();
     private List<Session> availabilities = new LinkedList<Session>();
     private List<Appointment> upcoming_appointments = new LinkedList<Appointment>();
 
@@ -77,11 +77,11 @@ public class Doctor implements Serializable {
         this.specializations = specializations;
     }
 
-    public List<Patient> getPatients_attended() {
+    public List<String> getPatients_attended() {
         return patients_attended;
     }
 
-    public void setPatients_attended(List<Patient> patients_attended) {
+    public void setPatients_attended(List<String> patients_attended) {
         this.patients_attended = patients_attended;
     }
 
