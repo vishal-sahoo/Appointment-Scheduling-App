@@ -10,6 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.B07ProjectGroup4">
         <activity
+            android:name=".DoctorsAvailActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ListDoctorsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".PatientScreenActivity"
+            android:exported="true" />
+        <activity
             android:name=".PatientLoginActivity"
             android:exported="true">
             <intent-filter>
