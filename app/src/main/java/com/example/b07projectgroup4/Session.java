@@ -3,43 +3,53 @@ package com.example.b07projectgroup4;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class Session implements Serializable {
-    private Calendar start_time;
-    private Calendar end_time;
+    private LocalDateTime start_time;
+    private Duration length;
 
-    public Session(){
-
+    public Session(LocalDateTime start_time, Duration length) {
+        this.start_time = start_time;
+        this.length = length;
     }
 
-    public Session(Calendar start_time, Calendar end_time) {
+    public LocalDateTime getStart_time() {
+        return start_time;
+    }
+
+    public void setStart_time(LocalDateTime start_time) {
         this.start_time = start_time;
-        this.end_time = end_time;
+    }
+
+    public Duration getLength() {
+        return length;
+    }
+    public void setLength(Duration length) {
+        this.length = length;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Session session = (Session) o;
+        return start_time.equals(session.start_time) && length.equals(session.length);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(start_time, length);
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "Session{" +
-                "start_time=" + start_time +
-                ", end_time=" + end_time +
-                '}';
-    }
-
-    public Calendar getStart_time() {
-        return start_time;
-    }
-
-    public void setStart_time(Calendar start_time) {
-        this.start_time = start_time;
-    }
-
-    public Calendar getEnd_time() {
-        return end_time;
-    }
-
-    public void setEnd_time(Calendar end_time) {
-        this.end_time = end_time;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, MMMM dd: hh:00 a");
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("hh:00 a");
+        return start_time.format(formatter) + " - " + start_time.plus(length).format(formatter2);
     }
 }
