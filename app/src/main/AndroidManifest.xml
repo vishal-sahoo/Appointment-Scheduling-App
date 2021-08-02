@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.B07ProjectGroup4">
         <activity
+            android:name=".ConfirmAppointmentActivity"
+            android:exported="true" />
+        <activity
             android:name=".DoctorsAvailActivity"
             android:exported="true" />
         <activity

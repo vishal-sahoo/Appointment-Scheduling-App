@@ -3,4 +3,11 @@
     <string name="patient_login_username_hint">Username</string>
     <string name="patient_login_password_hint">Password</string>
     <string name="patient_login_button_text">Log In</string>
+    <string name="booking_confirmation">Booking Confirmation</string>
+    <string name="book_appointment">BOOK APPOINTMENT</string>
+    <string name="confirm_appointment">Confirm your Appointment</string>
+    <string name="doctors_avail">Available Sessions</string>
+    <string name="date_of_appointment">Date of Appointment:</string>
+    <string name="name">Patient Name:</string>
+    <string name="doctor">Doctor:</string>
 </resources>
