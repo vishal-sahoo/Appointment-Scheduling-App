@@ -10,12 +10,13 @@
         android:id="@+id/PatientPointer"
         android:layout_width="171dp"
         android:layout_height="19dp"
+        android:layout_marginTop="24dp"
         android:gravity="center_horizontal"
         android:text="Patient: "
-        app:layout_constraintBaseline_toBaselineOf="@+id/PatientName"
         app:layout_constraintEnd_toStartOf="@+id/PatientName"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button"
@@ -43,10 +44,12 @@
     <ListView
         android:id="@+id/display_appointment"
         android:layout_width="362dp"
-        android:layout_height="497dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.326"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/PatientPointer"
+        app:layout_constraintVertical_bias="0.222" />
 </androidx.constraintlayout.widget.ConstraintLayout>

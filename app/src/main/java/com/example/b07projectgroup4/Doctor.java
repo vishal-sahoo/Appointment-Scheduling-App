@@ -3,6 +3,8 @@ package com.example.b07projectgroup4;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,29 +15,56 @@ public class Doctor implements Serializable {
     private String gender;
     private List<String> specializations = new LinkedList<String>();
     private List<String> patients_attended = new LinkedList<String>();
-    private List<Session> availabilities = new LinkedList<Session>();
+    private List<String> availabilities = new LinkedList<String>();
     private List<Appointment> upcoming_appointments = new LinkedList<Appointment>();
 
     public Doctor(){
 
     }
 
-    public Doctor(String username, String password, String name, String gender) {
+    public Doctor(String username, String password, String name, String gender, List<String> specializations, List<String> patients_attended, List<Appointment> upcoming_appointments) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.gender = gender;
+        for (int d = 0; d< 7; d++){
+            for (int h = 9; h <12; h++){
+                Session session = new Session (LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(),LocalDateTime.now().getDayOfMonth()+d,h,0), Duration.ofHours(1));
+                availabilities.add(session.toString());
+            }
+            for (int h = 14; h <17; h++){
+                Session session = new Session (LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(),LocalDateTime.now().getDayOfMonth()+d,h,0), Duration.ofHours(1));
+                availabilities.add(session.toString());
+            }
+        }
+        this.specializations = specializations;
+        this.patients_attended = patients_attended;
+        this.upcoming_appointments = upcoming_appointments;
     }
+
+    public Doctor(String username, String password, String name, String gender, List<String> specializations, List<String> patients_attended, List<String> availabilities, List<Appointment> upcoming_appointments) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.gender = gender;
+        this.specializations = specializations;
+        this.patients_attended = patients_attended;
+        this.availabilities = availabilities;
+        this.upcoming_appointments = upcoming_appointments;
+    }
+
+    /*public Doctor(String username, String password, String name, String gender) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.gender = gender;
+    }*/
 
     @NonNull
     @Override
     public String toString() {
-        return "Doctor{" +
-                "name='" + name + '\'' +
-                ", gender='" + gender + '\'' +
-                ", specializations=" + specializations +
-                '}';
-    }
+        return name + ", " + gender + ", " + specializations;
+    } //Name, gender, specializations []
 
     public String getUsername() {
         return username;
@@ -85,11 +114,11 @@ public class Doctor implements Serializable {
         this.patients_attended = patients_attended;
     }
 
-    public List<Session> getAvailabilities() {
+    public List<String> getAvailabilities() {
         return availabilities;
     }
 
-    public void setAvailabilities(List<Session> availabilities) {
+    public void setAvailabilities(List<String> availabilities) {
         this.availabilities = availabilities;
     }
 

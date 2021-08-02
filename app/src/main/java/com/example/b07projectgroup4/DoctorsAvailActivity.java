@@ -38,11 +38,11 @@ public class DoctorsAvailActivity extends AppCompatActivity {
         //Create listview
         listView = findViewById(R.id.listview);
         //Create ArrayList of sessions
-        ArrayList<Session> sessions = new ArrayList<>();
+        ArrayList<String> sessions = new ArrayList<>();
         //Append doctor availabilities to sessions
-        for (Session s : doctor.getAvailabilities()){
-            sessions.add(s);
-        }
+//        for (String s : doctor.getAvailabilities()){
+//            sessions.add(s);
+//        }
         //Create adapter
         ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,sessions);
         listView.setAdapter(adapter);
@@ -64,10 +64,13 @@ public class DoctorsAvailActivity extends AppCompatActivity {
             @Override
             //Recreate sessions arraylist when updated.
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                sessions.clear();
                 for(DataSnapshot child: dataSnapshot.getChildren()){
-                    Session session = child.getValue(Session.class);
-                    sessions.clear();
+                    String session = child.getValue(String.class);
                     sessions.add(session);
+                }
+                if(adapter != null){
+                    adapter.notifyDataSetChanged();
                 }
             }
             @Override

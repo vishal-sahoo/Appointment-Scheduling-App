@@ -43,6 +43,7 @@ public class ListDoctorsActivity extends AppCompatActivity {
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                doctors.clear();
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     doctors.add(postSnapshot.getValue(Doctor.class));
                 }

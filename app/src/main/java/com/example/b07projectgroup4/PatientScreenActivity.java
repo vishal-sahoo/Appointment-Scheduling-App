@@ -26,7 +26,7 @@ import java.util.*;
 
 
 public class PatientScreenActivity extends AppCompatActivity {
-
+    Patient passed_patient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +34,8 @@ public class PatientScreenActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Patient patient = (Patient)intent.getSerializableExtra("patient");
+        passed_patient = patient;
+
         String name = patient.getName();
         TextView patientName = findViewById(R.id.PatientName);
         patientName.setText(name);
@@ -46,22 +48,24 @@ public class PatientScreenActivity extends AppCompatActivity {
 
         List<Appointment> appointments = new ArrayList<>();
 
-
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference();
+        DatabaseReference ref = database.getReference("patients");
 
-        Query select = ref.child("appointments").orderByChild("patient_username");
+        DatabaseReference ref2 = ref.child(patient.getUsername()).child("upcoming_appointments");
 
         arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, appointments);
         displayAppointments.setAdapter(arrayAdapter);
 
-
-        select.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot child : dataSnapshot.getChildren()){
                     Appointment newAppointment = child.getValue(Appointment.class);
                     appointments.add(newAppointment);
+                    //Log.i("info", appointments.toString());
+                }
+                if(arrayAdapter != null){
+                    arrayAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -70,13 +74,11 @@ public class PatientScreenActivity extends AppCompatActivity {
                 Log.w("warning", "loadPost:onCancelled", databaseError.toException());
             }
         });
-
-
     }
 
     public void book(View view){
-        Intent intent = new Intent(getApplicationContext(), ListDoctorsActivity.class);
-
-        startActivity(intent);
+        Intent intent1 = new Intent(getApplicationContext(), ListDoctorsActivity.class);
+        intent1.putExtra("patient", passed_patient);
+        startActivity(intent1);
     }
 }

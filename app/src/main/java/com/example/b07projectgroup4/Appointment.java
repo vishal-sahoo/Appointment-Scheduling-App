@@ -9,13 +9,13 @@ public class Appointment implements Serializable {
     private String doctor_name;
     private String patient_username;
     private String patient_name;
-    private Session session;
+    private String session;
 
     public Appointment(){
 
     }
 
-    public Appointment(String doctor_username, String doctor_name, String patient_username, String patient_name, Session session) {
+    public Appointment(String doctor_username, String doctor_name, String patient_username, String patient_name, String session) {
         this.doctor_username = doctor_username;
         this.doctor_name = doctor_name;
         this.patient_username = patient_username;
@@ -26,11 +26,7 @@ public class Appointment implements Serializable {
     @NonNull
     @Override
     public String toString() {
-        return "Appointment{" +
-                "doctor_name='" + doctor_name + '\'' +
-                ", patient_name='" + patient_name + '\'' +
-                ", session=" + session +
-                '}';
+        return doctor_name + " at " + session;
     }
 
     public String getDoctor_username() {
@@ -65,11 +61,11 @@ public class Appointment implements Serializable {
         this.patient_name = patient_name;
     }
 
-    public Session getSession() {
+    public String getSession() {
         return session;
     }
 
-    public void setSession(Session session) {
+    public void setSession(String session) {
         this.session = session;
     }
 }

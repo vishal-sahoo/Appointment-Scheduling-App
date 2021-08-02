@@ -3,11 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/CSCB07/B07ProjectGroup4/app/src/main/res/layout/activity_list_doctors.xml" value="0.176" />
-        <entry key="..\:/CSCB07/B07ProjectGroup4/app/src/main/res/layout/activity_patient_login.xml" value="0.2" />
-        <entry key="..\:/CSCB07/B07ProjectGroup4/app/src/main/res/layout/activity_patient_screen.xml" value="0.2" />
         <entry key="..\:/Users/Yesom/AndroidStudioProjects/B07Project/app/src/main/res/layout/activity_list_doctors.xml" value="0.17481884057971014" />
+        <entry key="app/src/main/res/layout/activity_confirm_appointment.xml" value="0.25271739130434784" />
         <entry key="app/src/main/res/layout/activity_patient_login.xml" value="0.2752332677094873" />
+        <entry key="app/src/main/res/layout/activity_patient_screen.xml" value="0.375" />
       </map>
     </option>
   </component>
