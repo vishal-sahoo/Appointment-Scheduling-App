@@ -106,7 +106,7 @@ public class ConfirmAppointmentActivity extends AppCompatActivity {
         });
     }
 
-    public void finalBook(View view){
+    public void checkDoctorAndBook(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("doctors");
         DatabaseReference ref = myRef.child(selected_doctor.getUsername()).child("availabilities").getRef();
@@ -135,39 +135,55 @@ public class ConfirmAppointmentActivity extends AppCompatActivity {
         });
     }
 
+    public void finalBook(View view){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("patients");
+        DatabaseReference ref = myRef.child(selected_patient.getUsername()).child("upcoming_appointments").getRef();
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot child: snapshot.getChildren()){
+                    Appointment appointment = child.getValue(Appointment.class);
+                    if(appointment.getSession().equals(selected_session)){
+                        alert("pre_failed");
+                        return;
+                    }
+                }
+                checkDoctorAndBook();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w("warning", "Failed to read value.", error.toException());
+            }
+        });
+    }
+
     public void alert(String status){
         AlertDialog.Builder alert = new AlertDialog.Builder(ConfirmAppointmentActivity.this);
         if(status.equals("failed")){
             alert.setTitle("Booking Failed!"); //Session is no longer available
-            alert.setMessage("Selected Session is no longer available");
-            alert.setCancelable(false);
-            alert.setNegativeButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.cancel();
-                    Intent intent = new Intent(ConfirmAppointmentActivity.this, PatientScreenActivity.class);
-                    //intent.putExtra("appointment",appointment);
-                    intent.putExtra("patient",selected_patient);
-                    //intent.putExtra("doctor",doctor);
-                    startActivity(intent);
-                }
-            });
+            alert.setMessage("Selected Session is no longer available.");
         }else if(status.equals("passed")){
             alert.setTitle("Appointment Booked!");
             alert.setMessage("You've successfully booked the appointment.");
-            alert.setCancelable(false);
-            alert.setNegativeButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.cancel();
-                    Intent intent = new Intent(ConfirmAppointmentActivity.this, PatientScreenActivity.class);
-                    //intent.putExtra("appointment",appointment);
-                    intent.putExtra("patient",selected_patient);
-                    //intent.putExtra("doctor",doctor);
-                    startActivity(intent);
-                }
-            });
+        }else if(status.equals("pre_failed")){
+            alert.setTitle("Booking Failed!"); //Session is no longer available
+            alert.setMessage("Patient already has upcoming appointment at selected time.");
         }
+        alert.setCancelable(false);
+        alert.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+                Intent intent = new Intent(ConfirmAppointmentActivity.this, PatientScreenActivity.class);
+                //intent.putExtra("appointment",appointment);
+                intent.putExtra("patient",selected_patient);
+                //intent.putExtra("doctor",doctor);
+                startActivity(intent);
+            }
+        });
         AlertDialog alertDialog = alert.create();
         alertDialog.show();
     }

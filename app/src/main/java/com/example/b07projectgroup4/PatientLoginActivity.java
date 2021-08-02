@@ -60,11 +60,11 @@ public Doctor newDoctor(String username, String password, String name, String ge
     LinkedList<String> spec = new LinkedList<String>();
     //LinkedList<String> avail = new LinkedList<String>();
     //9 to 5, 1 hour sessions
-    Session session = new Session (LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(),LocalDateTime.now().getDayOfMonth() + 1,17,0), Duration.ofHours(1));
+    Session session = new Session (LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(),LocalDateTime.now().getDayOfMonth() + 3,17,0), Duration.ofHours(1));
     Appointment appt = new Appointment(username, name, "vasu", "vasu", session.toString());
     upcoming.add(appt);
     //avail.add(session);
-    spec.add("orthopedic");
+    spec.add("pediatrician");
     attended.add("vasu");
 
     Doctor d = new Doctor(username, password, name, gender, spec, attended, upcoming); //
@@ -92,8 +92,10 @@ public Doctor newDoctor(String username, String password, String name, String ge
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("doctors");
         //myRef.child("vasu").setValue(p);
-        Doctor d = newDoctor("vishal", "password", "vishal", "male");
-        myRef.child("vishal").setValue(d);
+        //Doctor d = newDoctor("vishal", "password", "vishal", "male");
+        String username = "yesom";
+        Doctor d = newDoctor(username, "password", username, "male");
+        myRef.child(username).setValue(d);
     }
 
     public void login(View view){
