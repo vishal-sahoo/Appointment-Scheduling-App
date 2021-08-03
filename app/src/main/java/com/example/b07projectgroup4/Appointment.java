@@ -26,7 +26,7 @@ public class Appointment implements Serializable {
     @NonNull
     @Override
     public String toString() {
-        return doctor_name + " at " + session;
+        return "Dr." + doctor_name + " at " + session;
     }
 
     public String getDoctor_username() {

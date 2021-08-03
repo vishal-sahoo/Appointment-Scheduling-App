@@ -16,10 +16,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.LinkedList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PatientLoginActivity extends AppCompatActivity {
 
@@ -29,86 +27,22 @@ public class PatientLoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_patient_login);
     }
 
-//    public void create2(View view){
-//        Session session = new Session (LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(),LocalDateTime.now().getDayOfMonth(),17,0), Duration.ofHours(2));
-//        Appointment appt = new Appointment("doctor_username", "doctor_name", "vasu", "vasu", session.toString());
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference("appointments");
-//        myRef.child("appt1").setValue(appt);
-//
-//        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                for(DataSnapshot child: snapshot.getChildren()){
-//                    Appointment app = child.getValue(Appointment.class);
-//                    EditText username_edit_text = (EditText) findViewById(R.id.PatientLoginUsername);
-//                    username_edit_text.setText("Working " + app.getSession());
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//    }
-
-public Doctor newDoctor(String username, String password, String name, String gender){
-
-    LinkedList<Appointment> upcoming = new LinkedList<Appointment>();
-    LinkedList<String> attended = new LinkedList<String>();
-    LinkedList<String> spec = new LinkedList<String>();
-    //LinkedList<String> avail = new LinkedList<String>();
-    //9 to 5, 1 hour sessions
-    Session session = new Session (LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(),LocalDateTime.now().getDayOfMonth() + 3,17,0), Duration.ofHours(1));
-    Appointment appt = new Appointment(username, name, "vasu", "vasu", session.toString());
-    upcoming.add(appt);
-    //avail.add(session);
-    spec.add("pediatrician");
-    attended.add("vasu");
-
-    Doctor d = new Doctor(username, password, name, gender, spec, attended, upcoming); //
-    d.getAvailabilities().remove(session.toString());
-    return d;
-}
-
-    public Patient newPatient(String username, String password, String name, String gender){
-
-        LinkedList<Appointment> previous = new LinkedList<Appointment>(); //
-        LinkedList<Appointment> upcoming = new LinkedList<Appointment>();
-        LinkedList<String> visited = new LinkedList<String>();
-        String c = "19/12/2000";
-        Session session = new Session (LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(),LocalDateTime.now().getDayOfMonth() + 1,17,0), Duration.ofHours(1));
-        Session session2 = new Session (LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(),LocalDateTime.now().getDayOfMonth(),17,0), Duration.ofHours(1));
-        Appointment appt = new Appointment("vishal", "vishal", username, name, session.toString());
-        Appointment appt2 = new Appointment("vishal", "vishal", username, name, session2.toString());;
-        previous.add(appt2); upcoming.add(appt); visited.add("vishal");
-        Patient p = new Patient(username, password, name, gender, c, previous, upcoming, visited);
-        return p;
-    }
-
-    public void create(View view){
-        //Patient p = newPatient("vasu", "password", "vasu", "male");
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("doctors");
-        //myRef.child("vasu").setValue(p);
-        //Doctor d = newDoctor("vishal", "password", "vishal", "male");
-        String username = "yesom";
-        Doctor d = newDoctor(username, "password", username, "male");
-        myRef.child(username).setValue(d);
-    }
-
     public void login(View view){
         EditText username_edit_text = (EditText) findViewById(R.id.PatientLoginUsername);
         EditText password_edit_text = (EditText) findViewById(R.id.PatientLoginPassword);
         String username = username_edit_text.getText().toString();
         String password = password_edit_text.getText().toString();
-        if(username.isEmpty()) {
-            username_edit_text.setError("Username cannot be empty");
+
+        Pattern valid_username_password = Pattern.compile("\\w+");
+        Matcher username_matcher = valid_username_password.matcher(username);
+        Matcher password_matcher = valid_username_password.matcher(password);
+
+        if(!username_matcher.matches()) {
+            username_edit_text.setError("Invalid Username Entered");
             return;
         }
-        if(password.isEmpty()){
-            password_edit_text.setError("Password cannot be empty");
+        if(!password_matcher.matches()){
+            password_edit_text.setError("Invalid Password Entered");
             return;
         }
 
@@ -139,7 +73,7 @@ public Doctor newDoctor(String username, String password, String name, String ge
                     }
                 }else{
                     //Username does not exist
-                    username_edit_text.setError("Username not found");
+                    username_edit_text.setError("Username Not Found");
                 }
             }
 

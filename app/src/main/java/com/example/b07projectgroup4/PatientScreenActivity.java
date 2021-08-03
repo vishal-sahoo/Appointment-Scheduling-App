@@ -37,8 +37,8 @@ public class PatientScreenActivity extends AppCompatActivity {
         passed_patient = patient;
 
         String name = patient.getName();
-        TextView patientName = findViewById(R.id.PatientName);
-        patientName.setText(name);
+        TextView patientName = findViewById(R.id.PatientPointer);
+        patientName.append(name);
 
         ListView displayAppointments;
 
@@ -56,9 +56,10 @@ public class PatientScreenActivity extends AppCompatActivity {
         arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, appointments);
         displayAppointments.setAdapter(arrayAdapter);
 
-        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref2.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                appointments.clear();
                 for (DataSnapshot child : dataSnapshot.getChildren()){
                     Appointment newAppointment = child.getValue(Appointment.class);
                     appointments.add(newAppointment);

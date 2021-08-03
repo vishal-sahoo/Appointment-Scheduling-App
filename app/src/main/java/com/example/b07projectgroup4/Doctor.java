@@ -63,7 +63,7 @@ public class Doctor implements Serializable {
     @NonNull
     @Override
     public String toString() {
-        return name + ", " + gender + ", " + specializations;
+        return "Dr." + name + ", " + gender + ", " + specializations;
     } //Name, gender, specializations []
 
     public String getUsername() {
