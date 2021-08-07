@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,7 +13,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,6 +38,7 @@ public class DoctorScreenActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Doctor doctor = (Doctor) intent.getSerializableExtra("doctor");
+
 
 
         String name = doctor.getName();
@@ -96,10 +95,10 @@ public class DoctorScreenActivity extends AppCompatActivity {
 
 
 
-    public void view_schedule(View view){
-        Intent intent2 = new Intent(getApplicationContext(), DoctorScheduleActivity.class);
-        intent2.putExtra("doctor", doctor);
-        startActivity(intent2);
-    }
+        public void view_schedule(View view){
+            Intent intent2 = new Intent(getApplicationContext(), DoctorScheduleActivity.class);
+            intent2.putExtra("doctor", doctor);
+            startActivity(intent2);
+        }
 }
 
