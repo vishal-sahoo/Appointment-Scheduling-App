@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.B07ProjectGroup4">
         <activity
+            android:name=".PatientDetailsActivity"
+            android:exported="true" />
+        <activity
             android:name=".DoctorScreenActivity"
             android:exported="true" />
         <activity
