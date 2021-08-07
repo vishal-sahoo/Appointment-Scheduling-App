@@ -13,7 +13,6 @@ public class Patient implements Serializable {
     private String name;
     private String gender;
     private String dob;
-    //private Calendar dob;
     private List<Appointment> previous_appointments = new LinkedList<Appointment>();
     private List<Appointment> upcoming_appointments = new LinkedList<Appointment>();
     private List<String> doctors_visited = new LinkedList<String>();
@@ -22,33 +21,13 @@ public class Patient implements Serializable {
 
     }
 
-    public Patient(String username, String password, String name, String gender, String dob, List<Appointment> previous_appointments, List<Appointment> upcoming_appointments, List<String> doctors_visited) {
+    public Patient(String username, String password, String name, String gender, String dob) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.gender = gender;
         this.dob = dob;
-        this.previous_appointments = previous_appointments;
-        this.upcoming_appointments = upcoming_appointments;
-        this.doctors_visited = doctors_visited;
     }
-
-    /*public Patient(String username, String password, String name, String gender, String dob, List<String> doctors_visited) {
-        this.username = username;
-        this.password = password;
-        this.name = name;
-        this.gender = gender;
-        this.dob = dob;
-        this.doctors_visited = doctors_visited;
-    }*/
-
-    /*public Patient(String username, String password, String name, String gender, String dob) {
-        this.username = username;
-        this.password = password;
-        this.name = name;
-        this.gender = gender;
-        this.dob = dob;
-    }*/
 
     @NonNull
     @Override

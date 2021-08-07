@@ -24,9 +24,9 @@ import com.google.firebase.database.Query;
 import java.util.*;
 
 
-
 public class PatientScreenActivity extends AppCompatActivity {
     Patient passed_patient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,32 +38,31 @@ public class PatientScreenActivity extends AppCompatActivity {
 
         String name = patient.getName();
         TextView patientName = findViewById(R.id.PatientPointer);
-        patientName.append(name);
+        patientName.append(" " + name);
 
         ListView displayAppointments;
 
-        ArrayAdapter<Appointment> arrayAdapter;
+        List<String> appointments = new ArrayList<>();
+
+        ArrayAdapter<String> arrayAdapter;
 
         displayAppointments = (ListView)findViewById(R.id.display_appointment);
 
-        List<Appointment> appointments = new ArrayList<>();
-
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("patients");
-
-        DatabaseReference ref2 = ref.child(patient.getUsername()).child("upcoming_appointments");
-
+        DatabaseReference ref2 = ref.child(patient.getUsername()).child("upcoming_appointments").getRef();
         arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, appointments);
         displayAppointments.setAdapter(arrayAdapter);
-
         ref2.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 appointments.clear();
                 for (DataSnapshot child : dataSnapshot.getChildren()){
-                    Appointment newAppointment = child.getValue(Appointment.class);
-                    appointments.add(newAppointment);
-                    //Log.i("info", appointments.toString());
+                    Appointment new_appointment = child.getValue(Appointment.class);
+                    if(new_appointment == null){
+                        return;
+                    }
+                    appointments.add(new_appointment.displayForPatient());
                 }
                 if(arrayAdapter != null){
                     arrayAdapter.notifyDataSetChanged();
@@ -78,8 +77,8 @@ public class PatientScreenActivity extends AppCompatActivity {
     }
 
     public void book(View view){
-        Intent intent1 = new Intent(getApplicationContext(), ListDoctorsActivity.class);
-        intent1.putExtra("patient", passed_patient);
-        startActivity(intent1);
+        Intent intent = new Intent(getApplicationContext(), ListDoctorsActivity.class);
+        intent.putExtra("patient", passed_patient);
+        startActivity(intent);
     }
 }

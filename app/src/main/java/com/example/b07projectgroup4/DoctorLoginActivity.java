@@ -19,17 +19,17 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PatientLoginActivity extends AppCompatActivity {
+public class DoctorLoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_patient_login);
+        setContentView(R.layout.activity_doctor_login);
     }
 
     public void login(View view){
-        EditText username_edit_text = (EditText) findViewById(R.id.PatientLoginUsername);
-        EditText password_edit_text = (EditText) findViewById(R.id.PatientLoginPassword);
+        EditText username_edit_text = (EditText) findViewById(R.id.DoctorLoginUsername);
+        EditText password_edit_text = (EditText) findViewById(R.id.DoctorLoginPassword);
         String username = username_edit_text.getText().toString();
         String password = password_edit_text.getText().toString();
 
@@ -48,18 +48,18 @@ public class PatientLoginActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
 
-        Query check = myRef.child("patients").orderByChild("username").equalTo(username);
+        Query check = myRef.child("doctors").orderByChild("username").equalTo(username);
 
         check.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()) {
                     for (DataSnapshot child : snapshot.getChildren()) {
-                        Patient patient = child.getValue(Patient.class);
-                        if(patient != null){
-                            if (patient.getPassword().equals(password)) {
-                                Intent intent = new Intent(getApplicationContext(), PatientScreenActivity.class);
-                                intent.putExtra("patient", patient);
+                        Doctor doctor = child.getValue(Doctor.class);
+                        if(doctor != null){
+                            if (doctor.getPassword().equals(password)) {
+                                Intent intent = new Intent(getApplicationContext(), DoctorScreenActivity.class);
+                                intent.putExtra("doctor", doctor);
                                 startActivity(intent);
                             } else {
                                 //Wrong Password
@@ -84,12 +84,7 @@ public class PatientLoginActivity extends AppCompatActivity {
     }
 
     public void signup(View view){
-        Intent intent = new Intent(this, PatientSignupActivity.class);
-        startActivity(intent);
-    }
-
-    public void switchToDoctor(View view){
-        Intent intent = new Intent(this, DoctorLoginActivity.class);
+        Intent intent = new Intent(this, DoctorSignupActivity.class);
         startActivity(intent);
     }
 }

@@ -15,21 +15,47 @@ public class Doctor implements Serializable {
     private String gender;
     private List<String> specializations = new LinkedList<String>();
     private List<String> patients_attended = new LinkedList<String>();
-    private List<String> availabilities = new LinkedList<String>();
+    private List<Timeslot> availabilities = new LinkedList<Timeslot>();
     private List<Appointment> upcoming_appointments = new LinkedList<Appointment>();
 
     public Doctor(){
 
     }
 
-    public Doctor(String username, String password, String name, String gender, List<String> specializations, List<String> patients_attended, List<Appointment> upcoming_appointments) {
+    public Doctor(String username, String password, String name, String gender, List<String> specializations) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.gender = gender;
+        this.specializations = specializations;
+
+        //set default availabilites
+        for(int d = 0; d < 7; d++){
+            for (int h = 9; h < 17; h++){
+                if(h==12 || h==13){
+                    continue;
+                }
+                Session session = new Session (LocalDateTime.of(LocalDateTime.now().getYear(),
+                        LocalDateTime.now().getMonth(),
+                        LocalDateTime.now().getDayOfMonth()+d, h,0),
+                        Duration.ofHours(1));
+                String time = session.toString();
+                availabilities.add(new Timeslot(time));
+            }
+        }
+    }
+
+    /*public Doctor(String username, String password, String name, String gender, List<String> specializations, List<String> patients_attended, List<String> upcoming_appointments) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.gender = gender;
         for (int d = 0; d< 7; d++){
             for (int h = 9; h <12; h++){
-                Session session = new Session (LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(),LocalDateTime.now().getDayOfMonth()+d,h,0), Duration.ofHours(1));
+                Session session = new Session (LocalDateTime.of(LocalDateTime.now().getYear(),
+                        LocalDateTime.now().getMonth(),
+                        LocalDateTime.now().getDayOfMonth()+d, h,0),
+                        Duration.ofHours(1));
                 availabilities.add(session.toString());
             }
             for (int h = 14; h <17; h++){
@@ -40,24 +66,6 @@ public class Doctor implements Serializable {
         this.specializations = specializations;
         this.patients_attended = patients_attended;
         this.upcoming_appointments = upcoming_appointments;
-    }
-
-    public Doctor(String username, String password, String name, String gender, List<String> specializations, List<String> patients_attended, List<String> availabilities, List<Appointment> upcoming_appointments) {
-        this.username = username;
-        this.password = password;
-        this.name = name;
-        this.gender = gender;
-        this.specializations = specializations;
-        this.patients_attended = patients_attended;
-        this.availabilities = availabilities;
-        this.upcoming_appointments = upcoming_appointments;
-    }
-
-    /*public Doctor(String username, String password, String name, String gender) {
-        this.username = username;
-        this.password = password;
-        this.name = name;
-        this.gender = gender;
     }*/
 
     @NonNull
@@ -114,11 +122,11 @@ public class Doctor implements Serializable {
         this.patients_attended = patients_attended;
     }
 
-    public List<String> getAvailabilities() {
+    public List<Timeslot> getAvailabilities() {
         return availabilities;
     }
 
-    public void setAvailabilities(List<String> availabilities) {
+    public void setAvailabilities(List<Timeslot> availabilities) {
         this.availabilities = availabilities;
     }
 

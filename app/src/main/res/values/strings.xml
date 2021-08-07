@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">B07ProjectGroup4</string>
-    <string name="patient_login_username_hint">Username</string>
-    <string name="patient_login_password_hint">Password</string>
-    <string name="patient_login_button_text">Log In</string>
+    <string name="login_username_hint">Username</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_button_text">Log In</string>
     <string name="booking_confirmation">Booking Confirmation</string>
     <string name="book_appointment">BOOK APPOINTMENT</string>
     <string name="confirm_appointment">Confirm your Appointment</string>
@@ -10,4 +10,22 @@
     <string name="date_of_appointment">Date of Appointment:</string>
     <string name="name">Patient Name:</string>
     <string name="doctor">Doctor:</string>
+    <string name="signup_username_hint">Username</string>
+    <string name="signup_name_hint">Name (First Last)</string>
+    <string name="signup_dob_hint">DD/MM/YYYY (DOB)</string>
+    <string name="signup_password_hint">Password</string>
+    <string name="signup_button_text">Sign Up</string>
+    <string-array name="signup_gender_list">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+    <string name="signup_spec_hint">Specialization1,Specialization2</string>
+    <string name="new_button_hint">Don\'t Have An Account?</string>
+    <string name="switch_to_doctor">I\'m A Doctor</string>
+    <string name="patient_login_title">Patient Login</string>
+    <string name="doctor_login_title">Doctor Login</string>
+    <string name="patient_signup_title">Patient Signup</string>
+    <string name="doctor_signup_title">Doctor Signup</string>
+    <string name="patient_screen_head"> Upcoming Appointments For</string>
+    <string name="patient_screen_button">Book An Appointment</string>
 </resources>

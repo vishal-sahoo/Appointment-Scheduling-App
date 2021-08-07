@@ -10,6 +10,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.B07ProjectGroup4">
         <activity
+            android:name=".DoctorScreenActivity"
+            android:exported="true" />
+        <activity
+            android:name=".DoctorSignupActivity"
+            android:exported="true" />
+        <activity
+            android:name=".DoctorLoginActivity"
+            android:exported="true" />
+        <activity
+            android:name=".PatientSignupActivity"
+            android:exported="true" />
+        <activity
             android:name=".ConfirmAppointmentActivity"
             android:exported="true" />
         <activity

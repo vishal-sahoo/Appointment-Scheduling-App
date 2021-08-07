@@ -29,7 +29,7 @@ public class DoctorsAvailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctors_avail);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        //Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         //Get Intent
         Intent intent = getIntent();
         //Get doctor and patient from previous intent
@@ -38,20 +38,20 @@ public class DoctorsAvailActivity extends AppCompatActivity {
         //Create listview
         listView = findViewById(R.id.listview);
         //Create ArrayList of sessions
-        ArrayList<String> sessions = new ArrayList<>();
+        ArrayList<Timeslot> timeslots = new ArrayList<>();
         //Append doctor availabilities to sessions
 //        for (String s : doctor.getAvailabilities()){
 //            sessions.add(s);
 //        }
         //Create adapter
-        ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,sessions);
+        ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,timeslots);
         listView.setAdapter(adapter);
         //Create OnItemClick Listener to pass session doctor and patient to the confirmation screen
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(DoctorsAvailActivity.this, ConfirmAppointmentActivity.class);
-                intent.putExtra("session",sessions.get(i));
+                intent.putExtra("timeslot",timeslots.get(i));
                 intent.putExtra("doctor",doctor);
                 intent.putExtra("patient",patient);
                 startActivity(intent);
@@ -64,10 +64,15 @@ public class DoctorsAvailActivity extends AppCompatActivity {
             @Override
             //Recreate sessions arraylist when updated.
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                sessions.clear();
+                timeslots.clear();
                 for(DataSnapshot child: dataSnapshot.getChildren()){
-                    String session = child.getValue(String.class);
-                    sessions.add(session);
+                    Timeslot timeslot = child.getValue(Timeslot.class);
+                    if(timeslot == null){
+                        return;
+                    }
+                    if(timeslot.getIs_available().equals("true")){
+                        timeslots.add(timeslot);
+                    }
                 }
                 if(adapter != null){
                     adapter.notifyDataSetChanged();

@@ -48,7 +48,7 @@ public class Session implements Serializable {
     @NonNull
     @Override
     public String toString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, MMMM dd: hh:00 a");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, dd MMM yyyy hh:00 a"); //E, dd MMM yyyy HH:mm
         DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("hh:00 a");
         return start_time.format(formatter) + " - " + start_time.plus(length).format(formatter2);
     }

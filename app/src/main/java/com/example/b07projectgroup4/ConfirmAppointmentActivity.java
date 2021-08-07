@@ -21,11 +21,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Objects;
 
 public class ConfirmAppointmentActivity extends AppCompatActivity {
-    Button bookButton;
-    Patient selected_patient;
-    Doctor selected_doctor;
-    String selected_session;
-    Appointment new_appointment;
+
+    private Patient selected_patient;
+    private Doctor selected_doctor;
+    private Timeslot selected_timeslot;
+    private Appointment new_appointment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +36,10 @@ public class ConfirmAppointmentActivity extends AppCompatActivity {
         //Get Intent
         Intent intent = getIntent();
         //Get session object from intent and display session in TextView
-        String session = (String) intent.getStringExtra("session");
-        selected_session = session;
+        Timeslot timeslot = (Timeslot) intent.getSerializableExtra("timeslot");
+        selected_timeslot = timeslot;
         TextView date = findViewById(R.id.session);
-        date.setText(session);
+        date.setText(timeslot.getTime());
 
         //Get doctor object from intent and display doctor info in TextView
         Doctor doctor = (Doctor) intent.getSerializableExtra("doctor");
@@ -53,21 +53,7 @@ public class ConfirmAppointmentActivity extends AppCompatActivity {
         TextView patient_name = findViewById(R.id.patient_name);
         patient_name.setText(patient.getName());//Placeholder name, replace with patient.getName()
 
-        new_appointment = new Appointment(doctor.getUsername(),doctor.getName(),patient.getUsername(),patient.getName(),session.toString());
-
-        //Create button and onClickListener()
-//        bookButton = findViewById(R.id.confirm_button);
-//        bookButton.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View view) {
-//                //Create Appointment and pass to patient screen
-//                Appointment appointment = new Appointment(doctor.getUsername(),doctor.getName(),patient.getUsername(),patient.getName(),session.toString());
-//                //Booking Successful Alert
-//
-//
-//            }
-//        });
+        new_appointment = new Appointment(doctor.getUsername(),doctor.getName(),patient.getUsername(),patient.getName(),timeslot.getTime());
     }
 
     public void addAppointmentToPatient(){
@@ -75,11 +61,10 @@ public class ConfirmAppointmentActivity extends AppCompatActivity {
         DatabaseReference myRef = database.getReference("patients");
         DatabaseReference ref = myRef.child(selected_patient.getUsername()).child("upcoming_appointments").getRef();
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int index = (int) snapshot.getChildrenCount();
-                ref.child(String.valueOf(index)).setValue(new_appointment);
-            }
+            int index = (int) snapshot.getChildrenCount();
+            ref.child(String.valueOf(index)).setValue(new_appointment);
+        }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -87,7 +72,6 @@ public class ConfirmAppointmentActivity extends AppCompatActivity {
             }
         });
     }
-
     public void addAppointmentToDoctor(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("doctors");
@@ -115,9 +99,14 @@ public class ConfirmAppointmentActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot child: snapshot.getChildren()){
-                    String session = child.getValue(String.class);
-                    if(session.equals(selected_session)){
-                        ref.child(child.getKey()).removeValue();
+                    Timeslot timeslot = child.getValue(Timeslot.class);
+                    if(timeslot == null){
+                        alert("error");
+                        return;
+                    }
+                    if(timeslot.getTime().equals(selected_timeslot.getTime()) && timeslot.getIs_available().equals("true")){
+                        ref.child(child.getKey()).child("is_available").setValue("false");
+                        ref.child(child.getKey()).child("patient_name").setValue(selected_patient.getName());
                         addAppointmentToDoctor();
                         addAppointmentToPatient();
                         //Display successful message
@@ -145,7 +134,11 @@ public class ConfirmAppointmentActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot child: snapshot.getChildren()){
                     Appointment appointment = child.getValue(Appointment.class);
-                    if(appointment.getSession().equals(selected_session)){
+                    if(appointment == null){
+                        alert("error");
+                        return;
+                    }
+                    if(appointment.getTime().equals(selected_timeslot.getTime())){
                         alert("pre_failed");
                         return;
                     }
@@ -171,6 +164,9 @@ public class ConfirmAppointmentActivity extends AppCompatActivity {
         }else if(status.equals("pre_failed")){
             alert.setTitle("Booking Failed!"); //Session is no longer available
             alert.setMessage("Patient already has upcoming appointment at selected time.");
+        }else if(status.equals("error")){
+            alert.setTitle("Booking Failed!"); //Session is no longer available
+            alert.setMessage("Encountered an unexpected error.");
         }
         alert.setCancelable(false);
         alert.setNegativeButton("OK", new DialogInterface.OnClickListener() {
