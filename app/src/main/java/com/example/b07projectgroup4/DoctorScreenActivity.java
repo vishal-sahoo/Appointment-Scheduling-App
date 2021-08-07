@@ -26,7 +26,7 @@ import java.util.List;
 
 public class DoctorScreenActivity extends AppCompatActivity {
 
-
+    Doctor doctor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +34,8 @@ public class DoctorScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_doctor_screen);
 
 
-
-
         Intent intent = getIntent();
-        Doctor doctor = (Doctor) intent.getSerializableExtra("doctor");
+        doctor = (Doctor) intent.getSerializableExtra("doctor");
 
 
 
@@ -92,7 +90,6 @@ public class DoctorScreenActivity extends AppCompatActivity {
         });
 
     }
-
 
 
         public void view_schedule(View view){
