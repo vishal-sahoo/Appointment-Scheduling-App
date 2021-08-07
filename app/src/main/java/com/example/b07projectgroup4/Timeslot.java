@@ -3,6 +3,9 @@ package com.example.b07projectgroup4;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Timeslot implements Serializable {
     private String time;
@@ -15,6 +18,19 @@ public class Timeslot implements Serializable {
 
     public Timeslot(String time) {
         this.time = time;
+    }
+
+    public Date convertToDate(){
+        //Can return null, please check
+        String string = time.split(" - ")[0];
+        SimpleDateFormat format = new SimpleDateFormat("E, dd MMM yyyy HH:mm a");
+        Date date = null;
+        try {
+            date = format.parse(string);
+        } catch (ParseException e) {
+            return null;
+        }
+        return date;
     }
 
     @NonNull

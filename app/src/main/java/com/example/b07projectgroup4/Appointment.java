@@ -3,6 +3,9 @@ package com.example.b07projectgroup4;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Appointment implements Serializable {
     private String doctor_username;
@@ -21,6 +24,18 @@ public class Appointment implements Serializable {
         this.patient_username = patient_username;
         this.patient_name = patient_name;
         this.time = time;
+    }
+
+    public Date convertToDate(){
+        String string = time.split(" - ")[0];
+        SimpleDateFormat format = new SimpleDateFormat("E, dd MMM yyyy HH:mm a");
+        Date date = null;
+        try {
+            date = format.parse(string);
+        } catch (ParseException e) {
+            return null;
+        }
+        return date;
     }
 
     public String displayForPatient(){

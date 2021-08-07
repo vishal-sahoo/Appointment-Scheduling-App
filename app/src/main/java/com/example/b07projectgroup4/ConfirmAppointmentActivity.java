@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class ConfirmAppointmentActivity extends AppCompatActivity {
@@ -59,12 +60,21 @@ public class ConfirmAppointmentActivity extends AppCompatActivity {
     public void addAppointmentToPatient(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("patients");
-        DatabaseReference ref = myRef.child(selected_patient.getUsername()).child("upcoming_appointments").getRef();
+        DatabaseReference ref = myRef.child(selected_patient.getUsername()).getRef();
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-            int index = (int) snapshot.getChildrenCount();
-            ref.child(String.valueOf(index)).setValue(new_appointment);
-        }
+                Patient patient = snapshot.getValue(Patient.class);
+                if(patient == null){
+                    alert("error");
+                    return;
+                }
+                boolean success = patient.addUpcomingAppointment(new_appointment);
+                if(!success){
+                    alert("error");
+                    return;
+                }
+                ref.child("upcoming_appointments").setValue(patient.getUpcoming_appointments());
+            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -75,12 +85,21 @@ public class ConfirmAppointmentActivity extends AppCompatActivity {
     public void addAppointmentToDoctor(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("doctors");
-        DatabaseReference ref = myRef.child(selected_doctor.getUsername()).child("upcoming_appointments").getRef();
+        DatabaseReference ref = myRef.child(selected_doctor.getUsername()).getRef();
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int index = (int) snapshot.getChildrenCount();
-                ref.child(String.valueOf(index)).setValue(new_appointment);
+                Doctor doctor = snapshot.getValue(Doctor.class);
+                if(doctor == null){
+                    alert("error");
+                    return;
+                }
+                boolean success = doctor.addUpcomingAppointment(new_appointment);
+                if(!success){
+                    alert("error");
+                    return;
+                }
+                ref.child("upcoming_appointments").setValue(doctor.getUpcoming_appointments());
             }
 
             @Override

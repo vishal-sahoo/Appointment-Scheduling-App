@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,6 +28,25 @@ public class Patient implements Serializable {
         this.name = name;
         this.gender = gender;
         this.dob = dob;
+    }
+
+    public boolean addUpcomingAppointment(Appointment new_appointment){
+        Date new_date = new_appointment.convertToDate();
+        if(new_date == null){
+            return false;
+        }
+        for(Appointment appointment: upcoming_appointments){
+            Date date = appointment.convertToDate();
+            if(date == null){
+                return false;
+            }
+            if(new_date.compareTo(date) < 0){
+                upcoming_appointments.add(upcoming_appointments.indexOf(appointment), new_appointment);
+                return true;
+            }
+        }
+        upcoming_appointments.add(new_appointment);
+        return true;
     }
 
     @NonNull
