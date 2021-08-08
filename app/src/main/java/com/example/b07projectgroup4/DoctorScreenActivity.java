@@ -84,12 +84,11 @@ public class DoctorScreenActivity extends AppCompatActivity {
         display_appointments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
-                Intent intent1 = new Intent(DoctorScreenActivity.this, PatientDetailsActivity.class);
+                Intent intent1 = new Intent(view.getContext(), PatientDetailsActivity.class);
                 Appointment selectedAppointment = appointments.get(position);
-                intent.putExtra("appointment", selectedAppointment);
+                intent1.putExtra("appointment", selectedAppointment);
                 startActivity(intent1);
             }
-
 
 
         });
