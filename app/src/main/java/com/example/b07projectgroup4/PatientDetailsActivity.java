@@ -37,9 +37,8 @@ public class PatientDetailsActivity extends AppCompatActivity {
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, doctors_visited);
         listView.setAdapter(arrayAdapter);
 
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("patients");//.child(patientUsername);
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("patients");
 
-        Patient p = new Patient();
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

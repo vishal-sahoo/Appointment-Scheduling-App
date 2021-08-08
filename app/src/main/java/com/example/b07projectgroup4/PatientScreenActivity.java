@@ -81,4 +81,8 @@ public class PatientScreenActivity extends AppCompatActivity {
         intent.putExtra("patient", passed_patient);
         startActivity(intent);
     }
+    public void logout(View view){
+        Intent intent = new Intent(getApplicationContext(), PatientLoginActivity.class);
+        startActivity(intent);
+    }
 }
