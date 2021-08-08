@@ -42,9 +42,11 @@ public class DoctorScreenActivity extends AppCompatActivity {
 
         ListView display_appointments;
 
-        List<String> appointments = new ArrayList<>();
+        //List<String> appointments = new ArrayList<>();
+        List<Appointment> appointments = new ArrayList<>();
 
-        ArrayAdapter<String> arrayAdapter;
+        //ArrayAdapter<String> arrayAdapter;
+        ArrayAdapter<Appointment> arrayAdapter;
 
         display_appointments = (ListView)findViewById(R.id.display_appointment);
 
@@ -52,7 +54,8 @@ public class DoctorScreenActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("doctors");
         DatabaseReference ref2 = ref.child(doctor.getUsername()).child("upcoming_appointments").getRef();
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, appointments);
+        //arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, appointments);
+        arrayAdapter = new ArrayAdapter<Appointment>(this, android.R.layout.simple_list_item_1, appointments);
         display_appointments.setAdapter(arrayAdapter);
 
         ref2.addValueEventListener(new ValueEventListener() {
@@ -64,7 +67,8 @@ public class DoctorScreenActivity extends AppCompatActivity {
                     if(new_appointment == null){
                         return;
                     }
-                    appointments.add(new_appointment.displayForPatient());
+                    //appointments.add(new_appointment.displayForPatient());
+                    appointments.add(new_appointment);
                 }
                 if(arrayAdapter != null){
                     arrayAdapter.notifyDataSetChanged();
@@ -81,8 +85,8 @@ public class DoctorScreenActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
                 Intent intent1 = new Intent(DoctorScreenActivity.this, PatientDetailsActivity.class);
-                //Appointment appointment = (Appointment) appointments.get(position);
-                //intent.putExtra("appointment", selectedAppointment);
+                Appointment selectedAppointment = appointments.get(position);
+                intent.putExtra("appointment", selectedAppointment);
                 startActivity(intent1);
             }
 
