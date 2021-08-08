@@ -37,6 +37,9 @@
             android:name=".PatientScreenActivity"
             android:exported="true" />
         <activity
+            android:name=".DoctorScheduleActivity"
+            android:exported="true"/>
+        <activity
             android:name=".PatientLoginActivity"
             android:exported="true">
             <intent-filter>
@@ -44,10 +47,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".DoctorScheduleActivity"
-            android:exported="true">
         </activity>
 
 
