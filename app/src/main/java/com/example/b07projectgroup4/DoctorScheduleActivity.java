@@ -31,7 +31,7 @@ public class DoctorScheduleActivity extends AppCompatActivity {
 
         ArrayList<Timeslot> timeslots = new ArrayList<>();
 
-        listview = findViewById(R.id.listview);
+        listview = findViewById(R.id.doctor_schedule);
         CustomAdapter adapter = new CustomAdapter(this, android.R.layout.simple_list_item_1, android.R.id.text1);
         adapter.addAll(timeslots);
         listview.setAdapter(adapter);

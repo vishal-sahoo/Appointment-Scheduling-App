@@ -21,6 +21,10 @@ import android.widget.TextView;
 
 import com.google.firebase.database.Query;
 //import java.lang.reflect.Array;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 
@@ -59,8 +63,11 @@ public class PatientScreenActivity extends AppCompatActivity {
                 appointments.clear();
                 for (DataSnapshot child : dataSnapshot.getChildren()){
                     Appointment new_appointment = child.getValue(Appointment.class);
-                    if(new_appointment == null){
-                        return;
+                    Date appointment_time = new_appointment.convertToDate();
+                    if(appointment_time.compareTo(new Date()) < 0){
+                        patient.addPastAppointment(new_appointment);
+                        patient.addDoctorsVisited(child.child("doctor_username").getValue(String.class));
+                        child.getRef().removeValue();
                     }
                     appointments.add(new_appointment.displayForPatient());
                 }
