@@ -25,9 +25,9 @@ public class CustomAdapter extends ArrayAdapter<Timeslot> {
             convertView = LayoutInflater.from(parent.getContext()).inflate(res, parent, false);
         }
         Timeslot item = getItem(position);
-        if (item.getIs_available() == "true") {
+        if (item.getIs_available().compareTo("true") == 0 ) {
             ((TextView) v).setTextColor(Color.BLACK);
-        } else if (item.getIs_available() == "false"){
+        } else if (item.getIs_available().compareTo("false") == 0){
             ((TextView) v).setTextColor(Color.LTGRAY);
         }
         TextView textView = (TextView) convertView.findViewById(textRes);
