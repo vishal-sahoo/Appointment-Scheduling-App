@@ -19,12 +19,19 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PatientLoginActivity extends AppCompatActivity {
+public class PatientLoginActivity extends AppCompatActivity implements Contract.View{
+
+    private Presenter presenter;
+    private EditText username_edit_text;
+    private EditText password_edit_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_login);
+        presenter = new Presenter(new PatientModel(), this);
+        username_edit_text = (EditText) findViewById(R.id.PatientLoginUsername);
+        password_edit_text = (EditText) findViewById(R.id.PatientLoginPassword);
     }
 
     public void login(View view){
@@ -81,6 +88,38 @@ public class PatientLoginActivity extends AppCompatActivity {
                 Log.w("warning", "Failed to read value.", error.toException());
             }
         });
+    }
+
+    /*public void login(View view){
+        presenter.login();
+    }*/
+
+    @Override
+    public String getUsername() {
+        return username_edit_text.getText().toString();
+    }
+
+    @Override
+    public String getPassword() {
+        return password_edit_text.getText().toString();
+    }
+
+    @Override
+    public void setUsernameError(String error) {
+        username_edit_text.setError(error);
+    }
+
+    @Override
+    public void setPasswordError(String error) {
+        password_edit_text.setError(error);
+    }
+
+    @Override
+    public void startNextActivity(Helper helper) {
+        Patient patient = (Patient) helper;
+        Intent intent = new Intent(getApplicationContext(), PatientScreenActivity.class);
+        intent.putExtra("patient", patient);
+        startActivity(intent);
     }
 
     public void signup(View view){
