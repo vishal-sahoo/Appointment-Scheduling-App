@@ -7,7 +7,7 @@
     tools:context=".DoctorScheduleActivity">
 
     <ListView
-        android:id="@+id/listview"
+        android:id="@+id/doctor_schedule"
         style="@style/Widget.AppCompat.ListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

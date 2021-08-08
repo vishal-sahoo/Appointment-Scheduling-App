@@ -30,8 +30,10 @@ public class DoctorScheduleActivity extends AppCompatActivity {
         Doctor doctor = (Doctor)intent.getSerializableExtra("doctor");
 
         ArrayList<Timeslot> timeslots = new ArrayList<>();
-
-        listview = findViewById(R.id.listview);
+        for (Timeslot ts : doctor.getAvailabilities()){
+            timeslots.add(ts);
+        }
+        listview = findViewById(R.id.doctor_schedule);
         CustomAdapter adapter = new CustomAdapter(this, android.R.layout.simple_list_item_1, android.R.id.text1);
         adapter.addAll(timeslots);
         listview.setAdapter(adapter);
@@ -44,7 +46,7 @@ public class DoctorScheduleActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 timeslots.clear();
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    Timeslot timeslot = new Timeslot(child.child("time").getValue(String.class));
+                    Timeslot timeslot = child.getValue(Timeslot.class);
                     timeslots.add(timeslot);
                 }
                 if (adapter != null) {
