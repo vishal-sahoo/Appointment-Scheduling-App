@@ -64,13 +64,14 @@ public class Doctor implements Serializable {
         upcoming_appointments.add(new_appointment);
         return true;
     }
-    public boolean addPreviousPatient(String old_patient){
-        if (old_patient == null){
-            return false;
-        }
-        patients_attended.add(old_patient);
-        return true;
-    }
+
+//    public boolean addPreviousPatient(String old_patient){
+//        if (old_patient == null){
+//            return false;
+//        }
+//        patients_attended.add(old_patient);
+//        return true;
+//    }
 
     /*public Doctor(String username, String password, String name, String gender, List<String> specializations, List<String> patients_attended, List<String> upcoming_appointments) {
         this.username = username;
