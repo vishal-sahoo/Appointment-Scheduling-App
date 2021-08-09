@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,6 +27,7 @@ public class PatientDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_details);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
         Appointment appointment = (Appointment)intent.getSerializableExtra("appointment");
@@ -37,9 +39,8 @@ public class PatientDetailsActivity extends AppCompatActivity {
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, doctors_visited);
         listView.setAdapter(arrayAdapter);
 
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("patients");//.child(patientUsername);
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("patients");
 
-        Patient p = new Patient();
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -70,5 +71,15 @@ public class PatientDetailsActivity extends AppCompatActivity {
         };
         myRef.addValueEventListener(postListener);
 
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home: {
+                finish();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

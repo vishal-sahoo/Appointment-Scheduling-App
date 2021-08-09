@@ -33,10 +33,10 @@ public class DoctorScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_doctor_screen);
 
         Intent intent = getIntent();
-        Doctor doctor = (Doctor)intent.getSerializableExtra("doctor");
-        passed_doctor = doctor;
+        passed_doctor = (Doctor)intent.getSerializableExtra("doctor");
 
-        String name = doctor.getName();
+
+        String name = passed_doctor.getName();
         TextView doctorName = findViewById(R.id.doctorPointer);
         doctorName.append(" " + name);
 
@@ -53,7 +53,7 @@ public class DoctorScreenActivity extends AppCompatActivity {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("doctors");
-        DatabaseReference ref2 = ref.child(doctor.getUsername()).child("upcoming_appointments").getRef();
+        DatabaseReference ref2 = ref.child(passed_doctor.getUsername()).child("upcoming_appointments").getRef();
         //arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, appointments);
         arrayAdapter = new ArrayAdapter<Appointment>(this, android.R.layout.simple_list_item_1, appointments);
         display_appointments.setAdapter(arrayAdapter);
@@ -97,8 +97,12 @@ public class DoctorScreenActivity extends AppCompatActivity {
     }
 
     public void view_schedule(View view){
-        Intent intent = new Intent(getApplicationContext(), DoctorScheduleActivity.class);
+        Intent intent = new Intent(DoctorScreenActivity.this, DoctorScheduleActivity.class);
         intent.putExtra("doctor", passed_doctor);
+        startActivity(intent);
+    }
+    public void logout(View view){
+        Intent intent = new Intent(getApplicationContext(), PatientLoginActivity.class);
         startActivity(intent);
     }
 }
