@@ -19,15 +19,22 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DoctorLoginActivity extends AppCompatActivity {
+public class DoctorLoginActivity extends AppCompatActivity implements Contract.DoctorView {
+
+    private DoctorPresenter presenter;
+    private EditText username_edit_text;
+    private EditText password_edit_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctor_login);
+        presenter = new DoctorPresenter(new DoctorModel(), this);
+        username_edit_text = (EditText) findViewById(R.id.DoctorLoginUsername);
+        password_edit_text = (EditText) findViewById(R.id.DoctorLoginPassword);
     }
 
-    public void login(View view){
+    /*public void login(View view){
         EditText username_edit_text = (EditText) findViewById(R.id.DoctorLoginUsername);
         EditText password_edit_text = (EditText) findViewById(R.id.DoctorLoginPassword);
         String username = username_edit_text.getText().toString();
@@ -81,6 +88,37 @@ public class DoctorLoginActivity extends AppCompatActivity {
                 Log.w("warning", "Failed to read value.", error.toException());
             }
         });
+    }*/
+
+    public void login(View view){
+        presenter.login();
+    }
+
+    @Override
+    public String getUsername() {
+        return username_edit_text.getText().toString();
+    }
+
+    @Override
+    public String getPassword() {
+        return password_edit_text.getText().toString();
+    }
+
+    @Override
+    public void setUsernameError(String error) {
+        username_edit_text.setError(error);
+    }
+
+    @Override
+    public void setPasswordError(String error) {
+        password_edit_text.setError(error);
+    }
+
+    @Override
+    public void startNextActivity(Doctor doctor) {
+        Intent intent = new Intent(getApplicationContext(), DoctorScreenActivity.class);
+        intent.putExtra("doctor", doctor);
+        startActivity(intent);
     }
 
     public void signup(View view){

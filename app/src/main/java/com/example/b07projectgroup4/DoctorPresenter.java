@@ -3,12 +3,12 @@ package com.example.b07projectgroup4;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Presenter implements Contract.Presenter{
+public class DoctorPresenter implements Contract.Presenter{
 
-    private Contract.Model model;
-    private Contract.View view;
+    private Contract.DoctorModel model;
+    private Contract.DoctorView view;
 
-    public Presenter(Contract.Model model, Contract.View view){
+    public DoctorPresenter(Contract.DoctorModel model, Contract.DoctorView view){
         this.model = model;
         this.view = view;
     }
@@ -30,14 +30,9 @@ public class Presenter implements Contract.Presenter{
             return;
         }
 
-        model.find(username);
-        boolean bool = model.getIs_Called();
-        while(!bool){
-            bool = model.getIs_Called();
-        }
-        if(model.getIs_Found()){
+        if(model.find(username)){
             if(model.validatePassword(password)){
-                view.startNextActivity(model.getField());
+                view.startNextActivity(model.getDoctor());
                 return;
             }
             view.setPasswordError("Incorrect Password");

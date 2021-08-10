@@ -23,7 +23,7 @@ public class Timeslot implements Serializable {
     public Date convertToDate(){
         //Can return null, please check
         String string = time.split(" - ")[0];
-        SimpleDateFormat format = new SimpleDateFormat("E, dd MMM yyyy HH:mm a");
+        SimpleDateFormat format = new SimpleDateFormat("E, dd MMM yyyy hh:00 a");
         Date date = null;
         try {
             date = format.parse(string);

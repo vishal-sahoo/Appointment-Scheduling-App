@@ -12,58 +12,47 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-public class PatientModel implements Contract.Model{
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+public class PatientModel implements Contract.PatientModel{
 
     private Patient patient;
-    private boolean is_found;
-    private boolean is_called;
+    public List<Patient> patients = new ArrayList<>();
 
-    @Override
-    public void find(String username) {
+    public PatientModel(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference();
+        DatabaseReference myRef = database.getReference("patients");
 
-        Query check = myRef.child("patients").orderByChild("username").equalTo(username);
-
-        check.addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
-                    for (DataSnapshot child : snapshot.getChildren()) {
-                        patient = child.getValue(Patient.class);
-                        setIs_Found(true);
-                    }
-                }else{
-                    setIs_Found(false);
+                for(DataSnapshot child : snapshot.getChildren()){
+                    patients.add(child.getValue(Patient.class));
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("warning", "Failed to read value.", error.toException());
+
             }
         });
     }
 
-    public void setIs_Called(){
-        is_called = true;
-    }
-    public boolean getIs_Called(){
-        return is_called;
+    @Override
+    public boolean find(String username){
+        for(Patient p: patients){
+            if(p.getUsername().equals(username)){
+                patient = p;
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
-    public boolean getIs_Found() {
-        return is_found;
-    }
-
-    public void setIs_Found(boolean bool) {
-        is_found = bool;
-        setIs_Called();
-    }
-
-    @Override
-    public Helper getField(){ return patient; }
+    public Patient getPatient(){ return patient; }
 
     @Override
     public boolean validatePassword(String password) {

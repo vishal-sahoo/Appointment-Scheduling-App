@@ -1,27 +1,15 @@
 package com.example.b07projectgroup4;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
+public class PatientLoginActivity extends AppCompatActivity implements Contract.PatientView{
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-public class PatientLoginActivity extends AppCompatActivity implements Contract.View{
-
-    private Presenter presenter;
+    private PatientPresenter presenter;
     private EditText username_edit_text;
     private EditText password_edit_text;
 
@@ -29,12 +17,12 @@ public class PatientLoginActivity extends AppCompatActivity implements Contract.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_login);
-        presenter = new Presenter(new PatientModel(), this);
+        presenter = new PatientPresenter(new PatientModel(), this);
         username_edit_text = (EditText) findViewById(R.id.PatientLoginUsername);
         password_edit_text = (EditText) findViewById(R.id.PatientLoginPassword);
     }
 
-    public void login(View view){
+    /*public void login(View view){
         EditText username_edit_text = (EditText) findViewById(R.id.PatientLoginUsername);
         EditText password_edit_text = (EditText) findViewById(R.id.PatientLoginPassword);
         String username = username_edit_text.getText().toString();
@@ -88,11 +76,11 @@ public class PatientLoginActivity extends AppCompatActivity implements Contract.
                 Log.w("warning", "Failed to read value.", error.toException());
             }
         });
-    }
-
-    /*public void login(View view){
-        presenter.login();
     }*/
+
+    public void login(View view){
+        presenter.login();
+    }
 
     @Override
     public String getUsername() {
@@ -115,8 +103,7 @@ public class PatientLoginActivity extends AppCompatActivity implements Contract.
     }
 
     @Override
-    public void startNextActivity(Helper helper) {
-        Patient patient = (Patient) helper;
+    public void startNextActivity(Patient patient) {
         Intent intent = new Intent(getApplicationContext(), PatientScreenActivity.class);
         intent.putExtra("patient", patient);
         startActivity(intent);

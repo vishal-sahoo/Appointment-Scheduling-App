@@ -1,28 +1,49 @@
 package com.example.b07projectgroup4;
 
-public class DoctorModel implements Contract.Model{
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class DoctorModel implements Contract.DoctorModel{
 
     private Doctor doctor;
-    private boolean is_found;
+    public List<Doctor> doctors = new ArrayList<>();
 
-    @Override
-    public void find(String username) {
+    public DoctorModel(){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("doctors");
 
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot child : snapshot.getChildren()){
+                    doctors.add(child.getValue(Doctor.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override
-    public boolean getIs_Found() {
-        return is_found;
-    }
-
-    @Override
-    public Helper getField() {
-        return doctor;
-    }
-
-    @Override
-    public boolean getIs_Called() {
-        return true;
+    public boolean find(String username) {
+        for(Doctor d: doctors){
+            if(d.getUsername().equals(username)){
+                doctor = d;
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -31,5 +52,10 @@ public class DoctorModel implements Contract.Model{
             return doctor.getPassword().equals(password);
         }
         return false;
+    }
+
+    @Override
+    public Doctor getDoctor() {
+        return doctor;
     }
 }
