@@ -30,7 +30,7 @@ public class PatientPresenter implements Contract.Presenter{
             return;
         }
 
-        if(model.find(username)){
+        if(model.isFound(username)){
             if(model.validatePassword(password)){
                 view.startNextActivity(model.getPatient());
                 return;

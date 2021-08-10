@@ -2,7 +2,7 @@ package com.example.b07projectgroup4;
 
 public interface Contract {
     public interface Model{
-        public boolean find(String username);
+        public boolean isFound(String username);
         public boolean validatePassword(String password);
     }
 

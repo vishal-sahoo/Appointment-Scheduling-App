@@ -41,7 +41,7 @@ public class PatientModel implements Contract.PatientModel{
     }
 
     @Override
-    public boolean find(String username){
+    public boolean isFound(String username){
         for(Patient p: patients){
             if(p.getUsername().equals(username)){
                 patient = p;

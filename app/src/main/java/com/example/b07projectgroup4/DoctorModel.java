@@ -36,7 +36,7 @@ public class DoctorModel implements Contract.DoctorModel{
     }
 
     @Override
-    public boolean find(String username) {
+    public boolean isFound(String username) {
         for(Doctor d: doctors){
             if(d.getUsername().equals(username)){
                 doctor = d;
