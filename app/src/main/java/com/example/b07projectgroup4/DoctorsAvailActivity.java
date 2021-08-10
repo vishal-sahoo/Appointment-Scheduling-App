@@ -22,6 +22,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Date;
 
 public class DoctorsAvailActivity extends AppCompatActivity {
 
@@ -37,6 +38,8 @@ public class DoctorsAvailActivity extends AppCompatActivity {
         //Get doctor and patient from previous intent
         Patient patient = (Patient)intent.getSerializableExtra("patient");
         Doctor doctor = (Doctor)intent.getSerializableExtra("doctor");
+        //Get current date
+        Date currentDate = new Date();
         //Create listview
         listView = findViewById(R.id.listview);
         //Create ArrayList of sessions
@@ -74,6 +77,10 @@ public class DoctorsAvailActivity extends AppCompatActivity {
                     }
                     if(timeslot.getIs_available().equals("true")){
                         timeslots.add(timeslot);
+                    }
+                    //Remove timeslots that passed current time
+                    if(timeslot.convertToDate().compareTo(currentDate)<0){
+                        timeslots.remove(timeslot);
                     }
                 }
                 if(adapter != null){

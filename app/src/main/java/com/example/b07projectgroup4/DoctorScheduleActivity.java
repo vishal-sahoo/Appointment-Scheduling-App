@@ -17,6 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Date;
 
 public class DoctorScheduleActivity extends AppCompatActivity {
     ListView listview;
@@ -29,10 +30,15 @@ public class DoctorScheduleActivity extends AppCompatActivity {
         Intent intent = getIntent();
         //Get doctor from intent
         Doctor doctor = (Doctor)intent.getSerializableExtra("doctor");
+        //Get current date
+        Date currentDate = new Date();
 
         ArrayList<Timeslot> timeslots = new ArrayList<>();
         for (Timeslot ts : doctor.getAvailabilities()){
-            timeslots.add(ts);
+            //Check if current date passed the timeslot
+            if(ts.convertToDate().compareTo(currentDate)>0){
+                timeslots.add(ts);
+            }
         }
         listview = findViewById(R.id.doctor_schedule);
         CustomAdapter adapter = new CustomAdapter(this, android.R.layout.simple_list_item_1, android.R.id.text1);
