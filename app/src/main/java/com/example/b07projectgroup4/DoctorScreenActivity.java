@@ -67,12 +67,21 @@ public class DoctorScreenActivity extends AppCompatActivity {
                     if(new_appointment == null){
                         return;
                     }
-                    //appointments.add(new_appointment.displayForPatient());
+                    Date appointment_time = new_appointment.convertToDate();
+                    if(appointment_time.compareTo(new Date()) < 0){
+                        String patient_username = child.child("patient_username").getValue(String.class);
+                        addPastAppointment(patient_username, new_appointment);
+                        addDoctorsVisited(patient_username, passed_doctor.getName());
+                        removeFromPatient(patient_username, new_appointment);
+                        addPatientsAttended(passed_doctor.getUsername(), child.child("patient_name").getValue(String.class));
+                        continue;
+                    }
                     appointments.add(new_appointment);
                 }
                 if(arrayAdapter != null){
                     arrayAdapter.notifyDataSetChanged();
                 }
+                ref2.setValue(appointments);
             }
 
             @Override
@@ -94,6 +103,92 @@ public class DoctorScreenActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public void addPastAppointment(String username, Appointment appointment){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("patients");
+        DatabaseReference ref2 = ref.child(username).child("previous_appointments");
+        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ref2.child(String.valueOf(snapshot.getChildrenCount())).setValue(appointment);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void addDoctorsVisited(String username, String doctor_name){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("patients");
+        DatabaseReference ref2 = ref.child(username).child("doctors_visited");
+        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot child: snapshot.getChildren()){
+                    String name = child.getValue(String.class);
+                    if(name.equals(doctor_name)){
+                        return;
+                    }
+                }
+                ref2.child(String.valueOf(snapshot.getChildrenCount())).setValue(doctor_name);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void addPatientsAttended(String username, String patient_name){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("doctors");
+        DatabaseReference ref2 = ref.child(username).child("patients_attended");
+        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot child: snapshot.getChildren()){
+                    String name = child.getValue(String.class);
+                    if(name.equals(patient_name)){
+                        return;
+                    }
+                }
+                ref2.child(String.valueOf(snapshot.getChildrenCount())).setValue(patient_name);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void removeFromPatient(String username, Appointment appointment){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("patients");
+        DatabaseReference ref2 = ref.child(username).getRef();
+
+        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Patient patient = snapshot.getValue(Patient.class);
+                if(patient == null){
+                    return;
+                }
+                patient.removeUpcomingAppointment(appointment);
+                ref2.child("upcoming_appointments").setValue(patient.getUpcoming_appointments());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void view_schedule(View view){

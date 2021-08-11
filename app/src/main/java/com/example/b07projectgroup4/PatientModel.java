@@ -25,9 +25,10 @@ public class PatientModel implements Contract.PatientModel{
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("patients");
 
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                patients.clear();
                 for(DataSnapshot child : snapshot.getChildren()){
                     patients.add(child.getValue(Patient.class));
                 }

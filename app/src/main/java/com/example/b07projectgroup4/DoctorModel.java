@@ -20,9 +20,10 @@ public class DoctorModel implements Contract.DoctorModel{
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("doctors");
 
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                doctors.clear();
                 for(DataSnapshot child : snapshot.getChildren()){
                     doctors.add(child.getValue(Doctor.class));
                 }
