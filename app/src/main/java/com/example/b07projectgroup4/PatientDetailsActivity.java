@@ -74,54 +74,6 @@ public class PatientDetailsActivity extends AppCompatActivity {
 
     }
 
-    public void addPastAppointment(String username, List<Appointment> appointments){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("patients");
-        DatabaseReference ref2 = ref.child(username).child("previous_appointments");
-        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                long index = snapshot.getChildrenCount();
-                for(Appointment appointment: appointments){
-                    ref2.child(String.valueOf(index)).setValue(appointment);
-                    index++;
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    public void addDoctorsVisited(String username, List<String> doctor_names){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("patients");
-        DatabaseReference ref2 = ref.child(username).child("doctors_visited");
-        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot child: snapshot.getChildren()){
-                    String name = child.getValue(String.class);
-                    if(doctor_names.contains(name)) {
-                        doctor_names.remove(doctor_names.indexOf(name));
-                    }
-                }
-                long index = snapshot.getChildrenCount();
-                for(String doctor_name: doctor_names) {
-                    ref2.child(String.valueOf(index)).setValue(doctor_name);
-                    index++;
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){

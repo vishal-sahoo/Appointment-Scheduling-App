@@ -72,7 +72,7 @@ public class PatientScreenActivity extends AppCompatActivity {
                         past_appointments.add(new_appointment);
                         String doctor_name = child.child("doctor_name").getValue(String.class);
                         if(!doctor_names.contains(doctor_name)){
-                            doctor_names.add(child.child("doctor_name").getValue(String.class));
+                            doctor_names.add(doctor_name);
                         }
                         continue;
                     }

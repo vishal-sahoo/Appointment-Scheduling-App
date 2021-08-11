@@ -71,7 +71,7 @@ public class DoctorScreenActivity extends AppCompatActivity {
                     Date appointment_time = new_appointment.convertToDate();
                     if(appointment_time.compareTo(new Date()) < 0){
                         String patient_name = child.child("patient_name").getValue(String.class);
-                        if(patient_names.contains(patient_name)){
+                        if(!patient_names.contains(patient_name)){
                             patient_names.add(patient_name);
                         }
                         continue;
@@ -96,6 +96,7 @@ public class DoctorScreenActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
                 Intent intent1 = new Intent(view.getContext(), PatientDetailsActivity.class);
                 Appointment selectedAppointment = appointments.get(position);
+                UpdatePatient(selectedAppointment.getPatient_username());
                 intent1.putExtra("appointment", selectedAppointment);
                 startActivity(intent1);
             }
@@ -104,6 +105,90 @@ public class DoctorScreenActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public void UpdatePatient(String patient_username){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("patients");
+        DatabaseReference ref2 = ref.child(patient_username).child("upcoming_appointments");
+
+        ref2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Appointment> update = new ArrayList<>();
+                List<Appointment> past_appointments = new ArrayList<>();
+                List<String> doctor_names = new ArrayList<>();
+                for (DataSnapshot child : dataSnapshot.getChildren()){
+                    Appointment new_appointment = child.getValue(Appointment.class);
+                    Date appointment_time = new_appointment.convertToDate();
+                    if(appointment_time.compareTo(new Date()) < 0){
+                        past_appointments.add(new_appointment);
+                        String doctor_name = child.child("doctor_name").getValue(String.class);
+                        if(!doctor_names.contains(doctor_name)){
+                            doctor_names.add(child.child("doctor_name").getValue(String.class));
+                        }
+                        continue;
+                    }
+                    update.add(new_appointment);
+                }
+                ref2.setValue(update);
+                addPastAppointment(patient_username, past_appointments);
+                addDoctorsVisited(patient_username, doctor_names);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.w("warning", "loadPost:onCancelled", databaseError.toException());
+            }
+        });
+    }
+
+    public void addPastAppointment(String username, List<Appointment> appointments){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("patients");
+        DatabaseReference ref2 = ref.child(username).child("previous_appointments");
+        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                long index = snapshot.getChildrenCount();
+                for(Appointment appointment: appointments){
+                    ref2.child(String.valueOf(index)).setValue(appointment);
+                    index++;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void addDoctorsVisited(String username, List<String> doctor_names){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("patients");
+        DatabaseReference ref2 = ref.child(username).child("doctors_visited");
+        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot child: snapshot.getChildren()){
+                    String name = child.getValue(String.class);
+                    if(doctor_names.contains(name)) {
+                        doctor_names.remove(doctor_names.indexOf(name));
+                    }
+                }
+                long index = snapshot.getChildrenCount();
+                for(String doctor_name: doctor_names) {
+                    ref2.child(String.valueOf(index)).setValue(doctor_name);
+                    index++;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void addPatientsAttended(String username, List<String> patient_names){
