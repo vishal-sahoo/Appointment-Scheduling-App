@@ -49,6 +49,9 @@ public class Patient implements Serializable{
         return true;
     }
 
+    public void removeUpcomingAppointment(Appointment appointment){
+        upcoming_appointments.remove(upcoming_appointments.indexOf(appointment));
+    }
 //    public boolean addPastAppointment(Appointment old_appointment){
 //        Date new_date = old_appointment.convertToDate();
 //        if(new_date == null){

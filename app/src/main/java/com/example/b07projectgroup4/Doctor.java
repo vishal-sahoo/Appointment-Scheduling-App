@@ -31,7 +31,7 @@ public class Doctor implements Serializable{
         this.specializations = specializations;
 
         //set default availabilites
-        for(int d = 0; d < 7; d++){
+        for(int d = 0; d < 14; d++){
             for (int h = 9; h < 17; h++){
                 if(h==12 || h==13){
                     continue;
@@ -63,6 +63,10 @@ public class Doctor implements Serializable{
         }
         upcoming_appointments.add(new_appointment);
         return true;
+    }
+
+    public void removeUpcomingAppointment(Appointment appointment){
+        upcoming_appointments.remove(upcoming_appointments.indexOf(appointment));
     }
 
 //    public boolean addPreviousPatient(String old_patient){

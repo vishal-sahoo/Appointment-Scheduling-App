@@ -43,6 +43,18 @@ public class Appointment implements Serializable {
         return "Doctor " + doctor_name + " on " + str[0] + " from " + str[1] ;
     }
 
+    @Override
+    public boolean equals(Object obj){
+        if(obj == null){
+            return false;
+        }
+        if(getClass() != obj.getClass()){
+            return false;
+        }
+        Appointment another = (Appointment) obj;
+        return time.equals(another.time);
+    }
+
     @NonNull
     @Override
     public String toString() {
