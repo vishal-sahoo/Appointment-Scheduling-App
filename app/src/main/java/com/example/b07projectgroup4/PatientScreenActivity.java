@@ -63,15 +63,17 @@ public class PatientScreenActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 appointments.clear();
                 update.clear();
+                List<Appointment> past_appointments = new ArrayList<>();
+                List<String> doctor_names = new ArrayList<>();
                 for (DataSnapshot child : dataSnapshot.getChildren()){
                     Appointment new_appointment = child.getValue(Appointment.class);
                     Date appointment_time = new_appointment.convertToDate();
                     if(appointment_time.compareTo(new Date()) < 0){
-                        addPastAppointment(patient.getUsername(), new_appointment);
-                        addDoctorsVisited(patient.getUsername(), child.child("doctor_name").getValue(String.class));
-                        String doctor_username = child.child("doctor_username").getValue(String.class);
-                        addPatientsAttended(doctor_username, patient.getName());
-                        removeFromDoctor(doctor_username, new_appointment);
+                        past_appointments.add(new_appointment);
+                        String doctor_name = child.child("doctor_name").getValue(String.class);
+                        if(!doctor_names.contains(doctor_name)){
+                            doctor_names.add(child.child("doctor_name").getValue(String.class));
+                        }
                         continue;
                     }
                     appointments.add(new_appointment.displayForPatient());
@@ -81,6 +83,8 @@ public class PatientScreenActivity extends AppCompatActivity {
                     arrayAdapter.notifyDataSetChanged();
                 }
                 ref2.setValue(update);
+                addPastAppointment(patient.getUsername(), past_appointments);
+                addDoctorsVisited(patient.getUsername(), doctor_names);
             }
 
             @Override
@@ -90,14 +94,18 @@ public class PatientScreenActivity extends AppCompatActivity {
         });
     }
 
-    public void addPastAppointment(String username, Appointment appointment){
+    public void addPastAppointment(String username, List<Appointment> appointments){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("patients");
         DatabaseReference ref2 = ref.child(username).child("previous_appointments");
         ref2.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ref2.child(String.valueOf(snapshot.getChildrenCount())).setValue(appointment);
+                long index = snapshot.getChildrenCount();
+                for(Appointment appointment: appointments){
+                    ref2.child(String.valueOf(index)).setValue(appointment);
+                    index++;
+                }
             }
 
             @Override
@@ -107,7 +115,7 @@ public class PatientScreenActivity extends AppCompatActivity {
         });
     }
 
-    public void addDoctorsVisited(String username, String doctor_name){
+    public void addDoctorsVisited(String username, List<String> doctor_names){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("patients");
         DatabaseReference ref2 = ref.child(username).child("doctors_visited");
@@ -116,57 +124,15 @@ public class PatientScreenActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot child: snapshot.getChildren()){
                     String name = child.getValue(String.class);
-                    if(name.equals(doctor_name)) {
-                        return;
+                    if(doctor_names.contains(name)) {
+                        doctor_names.remove(doctor_names.indexOf(name));
                     }
                 }
-                ref2.child(String.valueOf(snapshot.getChildrenCount())).setValue(doctor_name);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    public void addPatientsAttended(String username, String patient_name){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("doctors");
-        DatabaseReference ref2 = ref.child(username).child("patients_attended");
-        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot child: snapshot.getChildren()){
-                    String name = child.getValue(String.class);
-                    if(name.equals(patient_name)){
-                        return;
-                    }
+                long index = snapshot.getChildrenCount();
+                for(String doctor_name: doctor_names) {
+                    ref2.child(String.valueOf(index)).setValue(doctor_name);
+                    index++;
                 }
-                ref2.child(String.valueOf(snapshot.getChildrenCount())).setValue(patient_name);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    public void removeFromDoctor(String username, Appointment appointment){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("doctors");
-        DatabaseReference ref2 = ref.child(username).getRef();
-
-        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Doctor doctor = snapshot.getValue(Doctor.class);
-                if(doctor == null){
-                    return;
-                }
-                doctor.removeUpcomingAppointment(appointment);
-                ref2.child("upcoming_appointments").setValue(doctor.getUpcoming_appointments());
             }
 
             @Override
@@ -181,6 +147,7 @@ public class PatientScreenActivity extends AppCompatActivity {
         intent.putExtra("patient", passed_patient);
         startActivity(intent);
     }
+
     public void logout(View view){
         Intent intent = new Intent(getApplicationContext(), PatientLoginActivity.class);
         startActivity(intent);
