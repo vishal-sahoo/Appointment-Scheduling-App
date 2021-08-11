@@ -131,8 +131,9 @@ public class DoctorScreenActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot child: snapshot.getChildren()){
                     String name = child.getValue(String.class);
-                    if(name.equals(doctor_name));
-                    return;
+                    if(name.equals(doctor_name)){
+                        return;
+                    }
                 }
                 ref2.child(String.valueOf(snapshot.getChildrenCount())).setValue(doctor_name);
             }
@@ -153,8 +154,9 @@ public class DoctorScreenActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot child: snapshot.getChildren()){
                     String name = child.getValue(String.class);
-                    if(name.equals(patient_name));
-                    return;
+                    if(name.equals(patient_name)){
+                        return;
+                    }
                 }
                 ref2.child(String.valueOf(snapshot.getChildrenCount())).setValue(patient_name);
             }
