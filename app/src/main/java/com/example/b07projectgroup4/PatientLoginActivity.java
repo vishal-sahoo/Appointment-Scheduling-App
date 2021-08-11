@@ -22,62 +22,6 @@ public class PatientLoginActivity extends AppCompatActivity implements Contract.
         password_edit_text = (EditText) findViewById(R.id.PatientLoginPassword);
     }
 
-    /*public void login(View view){
-        EditText username_edit_text = (EditText) findViewById(R.id.PatientLoginUsername);
-        EditText password_edit_text = (EditText) findViewById(R.id.PatientLoginPassword);
-        String username = username_edit_text.getText().toString();
-        String password = password_edit_text.getText().toString();
-
-        Pattern valid_username = Pattern.compile("\\w+");
-        Matcher username_matcher = valid_username.matcher(username);
-
-        if(!username_matcher.matches()) {
-            username_edit_text.setError("Invalid Username Entered");
-            return;
-        }
-        if(password.isEmpty()){
-            password_edit_text.setError("Password Cannot Be Empty");
-            return;
-        }
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference();
-
-        Query check = myRef.child("patients").orderByChild("username").equalTo(username);
-
-        check.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
-                    for (DataSnapshot child : snapshot.getChildren()) {
-                        Patient patient = child.getValue(Patient.class);
-                        if(patient != null){
-                            if (patient.getPassword().equals(password)) {
-                                Intent intent = new Intent(getApplicationContext(), PatientScreenActivity.class);
-                                intent.putExtra("patient", patient);
-                                startActivity(intent);
-                            } else {
-                                //Wrong Password
-                                password_edit_text.setError("Incorrect Password");
-                            }
-                        }else{
-                            //Unexpected
-                            username_edit_text.setError("Unexpected error");
-                        }
-                    }
-                }else{
-                    //Username does not exist
-                    username_edit_text.setError("Username Not Found");
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("warning", "Failed to read value.", error.toException());
-            }
-        });
-    }*/
-
     public void login(View view){
         presenter.login();
     }

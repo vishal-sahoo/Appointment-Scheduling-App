@@ -52,22 +52,6 @@ public class Patient implements Serializable{
     public void removeUpcomingAppointment(Appointment appointment){
         upcoming_appointments.remove(upcoming_appointments.indexOf(appointment));
     }
-//    public boolean addPastAppointment(Appointment old_appointment){
-//        Date new_date = old_appointment.convertToDate();
-//        if(new_date == null){
-//            return false;
-//        }
-//        //Adding appointment to TOP of list (i.e first item, since it's most recent one that's passed)
-//        previous_appointments.add(0,old_appointment);
-//        return true;
-//    }
-//    public boolean addDoctorsVisited(String doctor){
-//        if(doctor == null){
-//            return false;
-//        }
-//        doctors_visited.add(doctor);
-//        return true;
-//    }
 
     @NonNull
     @Override

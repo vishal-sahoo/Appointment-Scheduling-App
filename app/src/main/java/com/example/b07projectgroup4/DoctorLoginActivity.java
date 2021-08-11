@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -29,66 +30,11 @@ public class DoctorLoginActivity extends AppCompatActivity implements Contract.D
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctor_login);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         presenter = new DoctorPresenter(new DoctorModel(), this);
         username_edit_text = (EditText) findViewById(R.id.DoctorLoginUsername);
         password_edit_text = (EditText) findViewById(R.id.DoctorLoginPassword);
     }
-
-    /*public void login(View view){
-        EditText username_edit_text = (EditText) findViewById(R.id.DoctorLoginUsername);
-        EditText password_edit_text = (EditText) findViewById(R.id.DoctorLoginPassword);
-        String username = username_edit_text.getText().toString();
-        String password = password_edit_text.getText().toString();
-
-        Pattern valid_username = Pattern.compile("\\w+");
-        Matcher username_matcher = valid_username.matcher(username);
-
-        if(!username_matcher.matches()) {
-            username_edit_text.setError("Invalid Username Entered");
-            return;
-        }
-        if(password.isEmpty()){
-            password_edit_text.setError("Password Cannot Be Empty");
-            return;
-        }
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference();
-
-        Query check = myRef.child("doctors").orderByChild("username").equalTo(username);
-
-        check.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
-                    for (DataSnapshot child : snapshot.getChildren()) {
-                        Doctor doctor = child.getValue(Doctor.class);
-                        if(doctor != null){
-                            if (doctor.getPassword().equals(password)) {
-                                Intent intent = new Intent(getApplicationContext(), DoctorScreenActivity.class);
-                                intent.putExtra("doctor", doctor);
-                                startActivity(intent);
-                            } else {
-                                //Wrong Password
-                                password_edit_text.setError("Incorrect Password");
-                            }
-                        }else{
-                            //Unexpected
-                            username_edit_text.setError("Unexpected error");
-                        }
-                    }
-                }else{
-                    //Username does not exist
-                    username_edit_text.setError("Username Not Found");
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("warning", "Failed to read value.", error.toException());
-            }
-        });
-    }*/
 
     public void login(View view){
         presenter.login();
@@ -124,5 +70,18 @@ public class DoctorLoginActivity extends AppCompatActivity implements Contract.D
     public void signup(View view){
         Intent intent = new Intent(this, DoctorSignupActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home: {
+                finish();
+                Intent intent = new Intent(this, PatientLoginActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

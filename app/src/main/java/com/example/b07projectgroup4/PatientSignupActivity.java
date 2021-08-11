@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -33,6 +34,7 @@ public class PatientSignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_signup);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public void signup(View view){
@@ -108,9 +110,26 @@ public class PatientSignupActivity extends AppCompatActivity {
                 name_edit_text.setText("");
                 dob_edit_text.setText("");
                 password_edit_text.setText("");
+                gotoLogin();
             }
         });
         AlertDialog alertDialog = alert.create();
         alertDialog.show();
+    }
+
+    private void gotoLogin() {
+        Intent intent = new Intent(this, PatientLoginActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home: {
+                finish();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

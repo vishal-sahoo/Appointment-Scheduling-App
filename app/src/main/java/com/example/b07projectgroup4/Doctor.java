@@ -69,37 +69,6 @@ public class Doctor implements Serializable{
         upcoming_appointments.remove(upcoming_appointments.indexOf(appointment));
     }
 
-//    public boolean addPreviousPatient(String old_patient){
-//        if (old_patient == null){
-//            return false;
-//        }
-//        patients_attended.add(old_patient);
-//        return true;
-//    }
-
-    /*public Doctor(String username, String password, String name, String gender, List<String> specializations, List<String> patients_attended, List<String> upcoming_appointments) {
-        this.username = username;
-        this.password = password;
-        this.name = name;
-        this.gender = gender;
-        for (int d = 0; d< 7; d++){
-            for (int h = 9; h <12; h++){
-                Session session = new Session (LocalDateTime.of(LocalDateTime.now().getYear(),
-                        LocalDateTime.now().getMonth(),
-                        LocalDateTime.now().getDayOfMonth()+d, h,0),
-                        Duration.ofHours(1));
-                availabilities.add(session.toString());
-            }
-            for (int h = 14; h <17; h++){
-                Session session = new Session (LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(),LocalDateTime.now().getDayOfMonth()+d,h,0), Duration.ofHours(1));
-                availabilities.add(session.toString());
-            }
-        }
-        this.specializations = specializations;
-        this.patients_attended = patients_attended;
-        this.upcoming_appointments = upcoming_appointments;
-    }*/
-
     @NonNull
     @Override
     public String toString() {
