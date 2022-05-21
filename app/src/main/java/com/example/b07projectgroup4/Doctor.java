@@ -38,7 +38,7 @@ public class Doctor implements Serializable{
                 }
                 Session session = new Session (LocalDateTime.of(LocalDateTime.now().getYear(),
                         LocalDateTime.now().getMonth(),
-                        LocalDateTime.now().getDayOfMonth()+d, h,0),
+                        (1 + (LocalDateTime.now().getDayOfMonth()+d) % 28), h,0),
                         Duration.ofHours(1));
                 String time = session.toString();
                 availabilities.add(new Timeslot(time));
