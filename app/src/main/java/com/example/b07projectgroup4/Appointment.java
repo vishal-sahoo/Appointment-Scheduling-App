@@ -39,7 +39,7 @@ public class Appointment implements Serializable {
     }
 
     public String displayForPatient(){
-        String [] str = time.split(" 2021 ");
+        String [] str = time.split(" 202[1-9] ");
         return "Doctor " + doctor_name + " on " + str[0] + " from " + str[1] ;
     }
 
